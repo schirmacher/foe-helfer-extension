@@ -1,3 +1,11 @@
+FoEproxy.addHandler('StartupService', 'all', (data, postData) => {
+
+    if (data.requestMethod === 'getData') {
+        battleadvice.era = data.responseData.user_data.era;
+    }
+    return;
+});
+
 FoEproxy.addHandler('BattlefieldService', 'all', (data, postData) => {
 
     if (data.requestMethod === 'getArmyPreview') {
@@ -67,6 +75,7 @@ FoEproxy.addHandler('PVPArenaService', 'all', (data, postData) => {
 
 let battleadvice = {
 
+    era: "",
     army: [],
     data: [],
 
@@ -85,7 +94,8 @@ let battleadvice = {
                     'Content-Type': 'application/x-www-form-urlencoded'
                 },
                 body: new URLSearchParams({
-                    'army': JSON.stringify(battleadvice.army)
+                    'army': JSON.stringify(battleadvice.army),
+                    'era': battleadvice.era
                 })
             }).then(response => { return response.text(); }).then(data => { battleadvice.data = data; });
         }
