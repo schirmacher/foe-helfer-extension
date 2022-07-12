@@ -18,4 +18,8 @@ For questions and answers please use our [forum](https://forum.foe-rechner.de/) 
 
 If you find an error or have a request that is not yet available as a ticket, please use the [ticket system](https://github.com/mainIine/foe-helfer-extension/issues).
 
+###### Attribution
+
+Battle Stats icon copied from https://www.pngkey.com/download/u2q8e6w7t4i1a9t4_fist-fist-icon/
+
 _This is an Open Source Projekt under the [AGPLv3 License](LICENSE.md)._

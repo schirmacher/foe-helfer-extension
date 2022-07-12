@@ -1,0 +1,88 @@
+ #battleStatsDialog {
+  top: 50px;
+  left: calc(100vw - 350px);
+  width: 550px;
+}
+
+#battleStatsDialogBody {
+  width: auto;
+  max-height: 800px;
+  display: block;
+  justify-content: center;
+  align-items: center;
+  font-size: 100%;
+  overflow-y: scroll;
+}
+
+.battleStatsSelected {
+  background-color: var(--background-table-success);
+}
+.battleStatsNotSelected {
+  background-color: var(--background-table-error);
+}
+
+#battleStatsDialog .flex > div {
+  min-width: 40%;
+  padding: 0.5em;
+}
+
+#battleStatsDialogBody table {
+  padding-top: 10px;
+}
+
+#battleStatsDialogBody [type="checkbox"] {
+  display: none;
+}
+
+#battleStatsDialogBody [type="select"] {
+  margin-top: 8px;
+  margin-bottom: 15px;
+}
+
+#battleStatsDialogBody [type="checkbox"] + label {
+  position: relative;
+  display: block;
+  cursor: pointer;
+  font-family: sans-serif;
+  padding-left:2.8em;
+  position: relative;
+  margin-top: 5px;
+  margin-bottom: 5px;
+}
+
+#battleStatsDialogBody [type="checkbox"] + label:before {
+  width: 2em;
+  height: 1em;
+  border-radius: 1em;
+  border: 2px solid rgb(147 9 9 / 100%);
+  background-color: rgb(147 9 9 / 36%);
+  content: "";
+  margin-right: 0.7em;
+  transition: background-color 0.5s linear;
+  z-index: 5;
+  position: absolute;
+  left: 0px;
+}
+
+#battleStatsDialogBody [type="checkbox"] + label:after {
+  width: 1em;
+  height: 1em;
+  border-radius: 1em;
+  background-color: var(--text-normal);
+  content: "";
+  transition: margin 0.1s linear;
+  box-shadow: 0px 0px 5px #aaa;
+  position: absolute;
+  left: 2px;
+  top: 2px;
+  z-index: 10;
+}
+
+#battleStatsDialogBody [type="checkbox"]:checked + label:before {
+  background-color: rgb(10 139 65 / 59%);
+  border-color: rgb(10 139 65 / 100%);
+}
+
+#battleStatsDialogBody [type="checkbox"]:checked + label:after {
+  margin: 0 0 0 1em;
+}

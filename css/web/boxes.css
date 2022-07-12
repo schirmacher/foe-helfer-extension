@@ -566,6 +566,9 @@ p {
 [id$=minigame_aztecs-Btn] span {
 	background-image: url('../images/menu/aztecsHelper.png');
 }
+[id$=battleadvice-Btn] span {
+	background-image: url('../images/menu/battleadvice.png');
+}
 
 /***********************************************************************************/
 

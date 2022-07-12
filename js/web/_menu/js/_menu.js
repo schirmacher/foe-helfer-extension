@@ -57,7 +57,8 @@ let _menu = {
 		'castle',
 		'music',
 		'musicControl',
-		'minigame_aztecs'
+		'minigame_aztecs',
+		'battleadvice'
 		// 'marketOffers',
 		// 'discord'
 	],
@@ -933,6 +934,21 @@ let _menu = {
 					betterMusic.TrackSelector();
 				}
 			}
+		});
+
+		return btn.append(btn_sp);
+	},
+
+	battleadvice_Btn: () => {
+		let btn = _menu.MakeButton('battleadvice', i18n('Menu.BattleAdvice.Title'), i18n('Menu.BattleAdvice.Desc'));
+
+		let btn_sp = $('<span />').bind('click', function () {
+			if ($('#battleAdviceDialog').length > 0) {
+				battleadvice.CloseBox();
+			} else {
+				battleadvice.ShowDialog();
+			}		
+
 		});
 
 		return btn.append(btn_sp);
