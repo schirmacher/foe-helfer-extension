@@ -97,44 +97,42 @@ let battleadvice = {
                     'army': JSON.stringify(battleadvice.army),
                     'era': battleadvice.era
                 })
-            }).then(response => { return response.text(); }).then(data => { battleadvice.data = data; });
-        }
-
-        if (battleadvice.data.length > 0) {
-            data1 = JSON.parse(battleadvice.data);
-            t = [];
-            t.push('<table class="foe-table">');
-            t.push('<tr><th colspan="2">Verteidiger</th><th colspan="4">Angreifer</th></tr>');
-            t.push('<tr><th>Einheiten</th><th>A/V</th><th>Einheiten</th><th>A/V</th><th>Verlust</th><th>Erfolg</th></tr>');
-
-            data1.forEach((battle, i) => {
-                t.push('<tr><td>');
-                t.push(battle['defender_units']);
-                t.push('</td><td>');
-                t.push(battle['defender_attack_boost']);
-                t.push('/')
-                t.push(battle['defender_defend_boost']);
-                t.push('</td><td>');
-                t.push(battle['attacker_units']);
-                t.push('</td><td>');
-                t.push(battle['attacker_attack_boost']);
-                t.push('/')
-                t.push(battle['attacker_defend_boost']);
-                t.push('</td><td>');
-                t.push(battle['attacker_losses']);
-                t.push('</td><td>');
-                t.push(battle['attacker_success']);
-                t.push('</td></tr>');
+            }).then(response => { return response.text(); }).then(data => {
+                battleadvice.data = data;
+                t = [];
+                t.push('<table class="foe-table">');
+                t.push('<tr><th colspan="2">Verteidiger</th><th colspan="4">Angreifer</th></tr>');
+                t.push('<tr><th>Einheiten</th><th>A/V</th><th>Einheiten</th><th>A/V</th><th>Verlust</th><th>Erfolg</th></tr>');
+                data1 = JSON.parse(battleadvice.data);
+                data1.forEach((battle, i) => {
+                    t.push('<tr><td>');
+                    t.push(battle['defender_units']);
+                    t.push('</td><td>');
+                    t.push(battle['defender_attack_boost']);
+                    t.push('/')
+                    t.push(battle['defender_defend_boost']);
+                    t.push('</td><td>');
+                    t.push(battle['attacker_units']);
+                    t.push('</td><td>');
+                    t.push(battle['attacker_attack_boost']);
+                    t.push('/')
+                    t.push(battle['attacker_defend_boost']);
+                    t.push('</td><td>');
+                    t.push(battle['attacker_losses']);
+                    t.push('</td><td>');
+                    t.push(battle['attacker_success']);
+                    t.push('</td></tr>');
+                });
+                t.push('</table>');
+                htmltext = '<div class="flex">';
+                htmltext += t.join('');
+                htmltext += '</div>';
+                $('#battleAdviceDialogBody').html(htmltext);
             });
-            t.push('</table>');
-            htmltext = '<div class="flex">';
-            htmltext += t.join('');
-            htmltext += '</div>';
         }
 
         if ($('#battleAdviceDialog').length === 0) {
             HTML.AddCssFile('battleadvice');
-    
             HTML.Box({
                 id: 'battleAdviceDialog',
                 title: i18n('Boxes.BattleAdvice.Title'),
