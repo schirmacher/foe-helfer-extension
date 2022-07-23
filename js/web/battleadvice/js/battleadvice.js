@@ -10,7 +10,7 @@ FoEproxy.addHandler('BattlefieldService', 'all', (data, postData) => {
 
     if (data.requestMethod === 'getArmyPreview') {
         battleadvice.army = data.responseData[0];
-        battleadvice.data = [];
+        battleadvice.advice = [];
     }
     json = "";
     if (true) {
@@ -27,6 +27,11 @@ FoEproxy.addHandler('BattlefieldService', 'all', (data, postData) => {
                 'responsedata': json
             })
         });
+
+       if ($('#battleAdviceDialog').length !== 0) {
+            $('#battleAdviceDialogBody').html("updating...");
+            battleadvice.RequestAndUpdateAdvice();
+       } 
     }
     return;
 });
@@ -76,8 +81,8 @@ FoEproxy.addHandler('PVPArenaService', 'all', (data, postData) => {
 let battleadvice = {
 
     era: "",
-    army: [],
-    data: [],
+    army: null,
+    advice: [],
 
     /**
      * Shows a box
@@ -85,9 +90,46 @@ let battleadvice = {
      * @constructor
      */
     ShowDialog: () => {
-        let htmltext = "<p>noch keine Daten über gegnerische Einheiten vorhanden, bitte warten.</p>";
+        if ($('#battleAdviceDialog').length === 0) {
+            HTML.AddCssFile('battleadvice');
+            HTML.Box({
+                id: 'battleAdviceDialog',
+                title: i18n('Boxes.BattleAdvice.Title'),
+                auto_close: true,
+                dragdrop: true,
+                minimize: true,
+                resize: true,                
+            });
 
-        if (battleadvice.army.length != 0 && battleadvice.data.length == 0) {
+            $('#battleAdviceDialogclose').on('click', function() {
+                battleadvice.close();
+            });
+        }
+
+        let htmltext = "undefined";
+        if (battleadvice.army != null) {
+            if (battleadvice.advice.length == 0) {
+                htmltext = "<p>Abfrage an Advice Server gestartet, bitte warten</p>";
+                battleadvice.RequestAndUpdateAdvice();
+            } else {
+                battleadvice.UpdateAdvice(battleadvice.advice);
+            }
+        } else
+            htmltext = "Erst 'Armee-Organisation' aufrufen";
+    
+        $('#battleAdviceDialogBody').html(htmltext);
+    },
+
+    close: () => {
+        battleadvice.saveSettings();
+    },
+
+    CloseBox: () => {
+        HTML.CloseOpenBox('battleAdviceDialog');
+        battleadvice.close();
+    },
+
+    RequestAndUpdateAdvice: () => {
             response = fetch('https://foebattlestats.herokuapp.com/advice/', {
                 method: 'POST',
                 headers:{
@@ -98,13 +140,18 @@ let battleadvice = {
                     'era': battleadvice.era
                 })
             }).then(response => { return response.text(); }).then(data => {
-                battleadvice.data = data;
+                battleadvice.advice = data;
+                battleadvice.UpdateAdvice(data);
+            });
+    }, 
+
+    UpdateAdvice: (advice) => {
                 t = [];
                 t.push('<table class="foe-table">');
                 t.push('<tr><th colspan="2">Verteidiger</th><th colspan="4">Angreifer</th></tr>');
                 t.push('<tr><th>Einheiten</th><th>A/V</th><th>Einheiten</th><th>A/V</th><th>Verlust</th><th>Erfolg</th></tr>');
-                data1 = JSON.parse(battleadvice.data);
-                data1.forEach((battle, i) => {
+                data = JSON.parse(advice);
+                data.forEach((battle, i) => {
                     t.push('<tr><td>');
                     t.push(battle['defender_units']);
                     t.push('</td><td>');
@@ -128,38 +175,8 @@ let battleadvice = {
                 htmltext += t.join('');
                 htmltext += '</div>';
                 $('#battleAdviceDialogBody').html(htmltext);
-            });
-        }
-
-        if ($('#battleAdviceDialog').length === 0) {
-            HTML.AddCssFile('battleadvice');
-            HTML.Box({
-                id: 'battleAdviceDialog',
-                title: i18n('Boxes.BattleAdvice.Title'),
-                auto_close: true,
-                dragdrop: true,
-                minimize: true,
-                resize: true,                
-            });
-
-            $('#battleAdviceDialogclose').on('click', function() {
-                battleadvice.close();
-            });
-        }
+    },
     
-        $('#battleAdviceDialogBody').html(htmltext);
-    },
-
-    
-    close: () => {
-        battleadvice.saveSettings();
-    },
-
-    CloseBox: () => {
-        HTML.CloseOpenBox('battleAdviceDialog');
-        battleadvice.close();
-    },
-
     loadSettings: ()=> {
 		tempSettings = JSON.parse(localStorage.getItem('battleadviceSettings') || '{}');
         battleadvice.Settings = battleadvice.update(battleadvice.Settings,tempSettings);
