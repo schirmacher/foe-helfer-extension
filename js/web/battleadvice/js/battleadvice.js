@@ -31,7 +31,7 @@ FoEproxy.addHandler('BattlefieldService', 'all', (data, postData) => {
        if ($('#battleAdviceDialog').length !== 0) {
             $('#battleAdviceDialogBody').html("updating...");
             battleadvice.RequestAndUpdateAdvice();
-       } 
+       }
     }
     return;
 });
@@ -160,12 +160,15 @@ let battleadvice = {
                 data = JSON.parse(advice);
                 if (data.length > 0) {
                     t.push('<table class="foe-table">');
-                    t.push('</th><th colspan="5">');
+                    t.push('<th colspan="8">');
                     t.push('Verteidigende Einheiten des Gegners: ');
                     t.push(data[0]['defender_units']);
+                    if (data[0]['nextbattle_wave_id']) {
+                        t.push(' ( + 2. Welle)');
+                    }
                     t.push('</th></tr>');
-                    t.push('<tr><th colspan="5">');
-                    t.push('<tr><th>Vert. A/V</th><th>Angreifer Einheiten</th><th>Angr. A/V</th><th>Verlust</th><th>Erfolg</th></tr>');
+                    t.push('<tr><th colspan="3"></th><th colspan="2">1. Welle</th><th colspan="3">2. Welle</th></tr>');
+                    t.push('<tr><th>Vert. A/V</th><th>Angreifer Einheiten</th><th>Angr. A/V</th><th>Verlust</th><th>Erfolg</th><th>Verlust</th><th colspan="2">Erfolg</th></tr>');
                     data.forEach((battle, i) => {
                         t.push('<tr><td>');
                         t.push(battle['defender_attack_boost']);
@@ -181,6 +184,17 @@ let battleadvice = {
                         t.push(battle['attacker_losses']);
                         t.push('</td><td>');
                         t.push(battle['attacker_success']);
+                        if (battle['nextbattle_wave_id']) {
+                            t.push('</td><td>');
+                            t.push(battle['nextbattle_attacker_losses']);
+                            t.push('</td><td>');
+                            t.push(battle['nextbattle_attacker_success']);
+                        } else {
+                            t.push('</td><td>');
+                            t.push('</td><td>');
+                        }
+                        t.push('</td><td>');
+                        t.push(battle['comment']);
                         t.push('</td></tr>');
                     });
                     t.push('</table>');
