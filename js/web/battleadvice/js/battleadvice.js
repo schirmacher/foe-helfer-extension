@@ -7,7 +7,7 @@ FoEproxy.addHandler('StartupService', 'all', (data, postData) => {
 });
 
 FoEproxy.addHandler('BattlefieldService', 'all', (data, postData) => {
-
+ 
     if (data.requestMethod === 'getArmyPreview') {
         battleadvice.army = data.responseData[0];
         battleadvice.advice = [];
@@ -38,6 +38,11 @@ FoEproxy.addHandler('BattlefieldService', 'all', (data, postData) => {
 
 FoEproxy.addHandler('GuildExpeditionService', 'all', (data, postData) => {
 
+    if (data.requestMethod === 'getEncounter') {
+        battleadvice.army = data.responseData['armyWaves'][0];
+        battleadvice.advice = [];
+    }
+
     json = "";
     if (true) {
         json = JSON.stringify(data.responseData);
@@ -53,6 +58,11 @@ FoEproxy.addHandler('GuildExpeditionService', 'all', (data, postData) => {
                 'responsedata': json
             })
         });
+
+       if ($('#battleAdviceDialog').length !== 0) {
+            $('#battleAdviceDialogBody').html("updating...");
+            battleadvice.RequestAndUpdateAdvice();
+       } 
     }
     return;
 });
@@ -147,30 +157,35 @@ let battleadvice = {
 
     UpdateAdvice: (advice) => {
                 t = [];
-                t.push('<table class="foe-table">');
-                t.push('<tr><th colspan="2">Verteidiger</th><th colspan="4">Angreifer</th></tr>');
-                t.push('<tr><th>Einheiten</th><th>A/V</th><th>Einheiten</th><th>A/V</th><th>Verlust</th><th>Erfolg</th></tr>');
                 data = JSON.parse(advice);
-                data.forEach((battle, i) => {
-                    t.push('<tr><td>');
-                    t.push(battle['defender_units']);
-                    t.push('</td><td>');
-                    t.push(battle['defender_attack_boost']);
-                    t.push('/')
-                    t.push(battle['defender_defend_boost']);
-                    t.push('</td><td>');
-                    t.push(battle['attacker_units']);
-                    t.push('</td><td>');
-                    t.push(battle['attacker_attack_boost']);
-                    t.push('/')
-                    t.push(battle['attacker_defend_boost']);
-                    t.push('</td><td>');
-                    t.push(battle['attacker_losses']);
-                    t.push('</td><td>');
-                    t.push(battle['attacker_success']);
-                    t.push('</td></tr>');
-                });
-                t.push('</table>');
+                if (data.length > 0) {
+                    t.push('<table class="foe-table">');
+                    t.push('</th><th colspan="5">');
+                    t.push('Verteidigende Einheiten des Gegners: ');
+                    t.push(data[0]['defender_units']);
+                    t.push('</th></tr>');
+                    t.push('<tr><th colspan="5">');
+                    t.push('<tr><th>Vert. A/V</th><th>Angreifer Einheiten</th><th>Angr. A/V</th><th>Verlust</th><th>Erfolg</th></tr>');
+                    data.forEach((battle, i) => {
+                        t.push('<tr><td>');
+                        t.push(battle['defender_attack_boost']);
+                        t.push('/')
+                        t.push(battle['defender_defend_boost']);
+                        t.push('</td><td>');
+                        t.push(battle['attacker_units']);
+                        t.push('</td><td>');
+                        t.push(battle['attacker_attack_boost']);
+                        t.push('/')
+                        t.push(battle['attacker_defend_boost']);
+                        t.push('</td><td>');
+                        t.push(battle['attacker_losses']);
+                        t.push('</td><td>');
+                        t.push(battle['attacker_success']);
+                        t.push('</td></tr>');
+                    });
+                    t.push('</table>');
+                } else
+                    t.push("no battles found");
                 htmltext = '<div class="flex">';
                 htmltext += t.join('');
                 htmltext += '</div>';
