@@ -7,7 +7,7 @@ FoEproxy.addHandler('StartupService', 'all', (data, postData) => {
 });
 
 FoEproxy.addHandler('BattlefieldService', 'all', (data, postData) => {
- 
+
     if (data.requestMethod === 'getArmyPreview') {
         battleadvice.army = data.responseData[0];
         battleadvice.advice = [];
@@ -20,7 +20,7 @@ FoEproxy.addHandler('BattlefieldService', 'all', (data, postData) => {
             method: 'POST',
             headers:{
                 'Content-Type': 'application/x-www-form-urlencoded'
-            },    
+            },
             body: new URLSearchParams({
                 'requestclass': data.requestClass,
                 'requestmethod': data.requestMethod,
@@ -28,8 +28,8 @@ FoEproxy.addHandler('BattlefieldService', 'all', (data, postData) => {
             })
         });
 
-       if ($('#battleAdviceDialog').length !== 0) {
-            $('#battleAdviceDialogBody').html("updating...");
+       if ($('#BattleAdvice').length !== 0) {
+            $('#BattleAdviceBody').html("updating...");
             battleadvice.RequestAndUpdateAdvice();
        }
     }
@@ -51,7 +51,7 @@ FoEproxy.addHandler('GuildExpeditionService', 'all', (data, postData) => {
             method: 'POST',
             headers:{
                 'Content-Type': 'application/x-www-form-urlencoded'
-            },    
+            },
             body: new URLSearchParams({
                 'requestclass': data.requestClass,
                 'requestmethod': data.requestMethod,
@@ -59,10 +59,10 @@ FoEproxy.addHandler('GuildExpeditionService', 'all', (data, postData) => {
             })
         });
 
-       if ($('#battleAdviceDialog').length !== 0) {
-            $('#battleAdviceDialogBody').html("updating...");
+       if ($('#BattleAdvice').length !== 0) {
+            $('#BattleAdviceBody').html("updating...");
             battleadvice.RequestAndUpdateAdvice();
-       } 
+       }
     }
     return;
 });
@@ -77,7 +77,7 @@ FoEproxy.addHandler('PVPArenaService', 'all', (data, postData) => {
             method: 'POST',
             headers:{
                 'Content-Type': 'application/x-www-form-urlencoded'
-            },    
+            },
             body: new URLSearchParams({
                 'requestclass': data.requestClass,
                 'requestmethod': data.requestMethod,
@@ -100,19 +100,15 @@ let battleadvice = {
      * @constructor
      */
     ShowDialog: () => {
-        if ($('#battleAdviceDialog').length === 0) {
+		if ($('#BattleAdvice').length === 0) {
             HTML.AddCssFile('battleadvice');
             HTML.Box({
-                id: 'battleAdviceDialog',
+                id: 'BattleAdvice',
                 title: i18n('Boxes.BattleAdvice.Title'),
                 auto_close: true,
                 dragdrop: true,
                 minimize: true,
-                resize: true,                
-            });
-
-            $('#battleAdviceDialogclose').on('click', function() {
-                battleadvice.close();
+                resize: true,
             });
         }
 
@@ -126,8 +122,8 @@ let battleadvice = {
             }
         } else
             htmltext = "Erst 'Armee-Organisation' aufrufen";
-    
-        $('#battleAdviceDialogBody').html(htmltext);
+
+        $('#BattleAdviceBody').html(htmltext);
     },
 
     close: () => {
@@ -135,7 +131,7 @@ let battleadvice = {
     },
 
     CloseBox: () => {
-        HTML.CloseOpenBox('battleAdviceDialog');
+        HTML.CloseOpenBox('BattleAdvice');
         battleadvice.close();
     },
 
@@ -153,7 +149,7 @@ let battleadvice = {
                 battleadvice.advice = data;
                 battleadvice.UpdateAdvice(data);
             });
-    }, 
+    },
 
     UpdateAdvice: (advice) => {
                 t = [];
@@ -203,18 +199,18 @@ let battleadvice = {
                 htmltext = '<div class="flex">';
                 htmltext += t.join('');
                 htmltext += '</div>';
-                $('#battleAdviceDialogBody').html(htmltext);
+                $('#BattleAdviceBody').html(htmltext);
     },
-    
+
     loadSettings: ()=> {
 		tempSettings = JSON.parse(localStorage.getItem('battleadviceSettings') || '{}');
         battleadvice.Settings = battleadvice.update(battleadvice.Settings,tempSettings);
     },
-    
+
     saveSettings: ()=> {
         localStorage.setItem('battleadviceSettings', JSON.stringify(battleadvice.Settings));
     },
-    
+
     update (obj/*, …*/) {
         for (var i=1; i<arguments.length; i++) {
             for (var prop in arguments[i]) {
