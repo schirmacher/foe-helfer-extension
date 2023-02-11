@@ -16,7 +16,7 @@ FoEproxy.addHandler('BattlefieldService', 'all', (data, postData) => {
     if (true) {
         json = JSON.stringify(data.responseData);
 
-        fetch('https://foecollector.herokuapp.com/dbwrite/', {
+        fetch('https://foecollector.nn4l.de/dbwrite/', {
             method: 'POST',
             headers:{
                 'Content-Type': 'application/x-www-form-urlencoded'
@@ -47,7 +47,7 @@ FoEproxy.addHandler('GuildExpeditionService', 'all', (data, postData) => {
     if (true) {
         json = JSON.stringify(data.responseData);
 
-        fetch('https://foecollector.herokuapp.com/dbwrite/', {
+        fetch('https://foecollector.nn4l.de/dbwrite/', {
             method: 'POST',
             headers:{
                 'Content-Type': 'application/x-www-form-urlencoded'
@@ -73,7 +73,7 @@ FoEproxy.addHandler('PVPArenaService', 'all', (data, postData) => {
     if (true) {
         json = JSON.stringify(data.responseData);
 
-        fetch('https://foecollector.herokuapp.com/dbwrite/', {
+        fetch('https://foecollector.nn4l.de/dbwrite/', {
             method: 'POST',
             headers:{
                 'Content-Type': 'application/x-www-form-urlencoded'
@@ -136,7 +136,7 @@ let battleadvice = {
     },
 
     RequestAndUpdateAdvice: () => {
-            response = fetch('https://foebattlestats.herokuapp.com/advice/', {
+            response = fetch('https://foebattlestats.nn4l.de/advice/', {
                 method: 'POST',
                 headers:{
                     'Content-Type': 'application/x-www-form-urlencoded'
