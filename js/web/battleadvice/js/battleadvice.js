@@ -36,6 +36,48 @@ FoEproxy.addHandler('BattlefieldService', 'all', (data, postData) => {
     return;
 });
 
+FoEproxy.addHandler('GuildBattlegroundService', 'all', (data, postData) => {
+
+    json = "";
+    if (true) {
+        json = JSON.stringify(data.responseData);
+
+        fetch('https://foecollector.nn4l.de/dbwrite/', {
+            method: 'POST',
+            headers:{
+                'Content-Type': 'application/x-www-form-urlencoded'
+            },
+            body: new URLSearchParams({
+                'requestclass': data.requestClass,
+                'requestmethod': data.requestMethod,
+                'responsedata': json
+            })
+        });
+    }
+    return;
+});
+
+FoEproxy.addHandler('GuildBattlegroundStateService', 'all', (data, postData) => {
+
+    json = "";
+    if (true) {
+        json = JSON.stringify(data.responseData);
+
+        fetch('https://foecollector.nn4l.de/dbwrite/', {
+            method: 'POST',
+            headers:{
+                'Content-Type': 'application/x-www-form-urlencoded'
+            },
+            body: new URLSearchParams({
+                'requestclass': data.requestClass,
+                'requestmethod': data.requestMethod,
+                'responsedata': json
+            })
+        });
+    }
+    return;
+});
+
 FoEproxy.addHandler('GuildExpeditionService', 'all', (data, postData) => {
 
     if (data.requestMethod === 'getEncounter') {
